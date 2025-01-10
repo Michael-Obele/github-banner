@@ -1,157 +1,92 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
-	import { Input } from '$lib/components/ui/input';
-	import { getTextGrid, willTextFit } from '$lib/utils/textGrid';
+	import ContGrid from './ContGrid.svelte';
+	import { Github, Twitter, Linkedin, Download, Palette, Type } from 'lucide-svelte';
 
-	// Constants
-	const ROWS = 7;
-	const COLS = 52;
-
-	// Reactive variables
-	let textPosition = $state({ row: 0, col: 0 });
-	let grid = $state<number[][]>([]);
-	let intensity = $state(1);
-	let isDrawing = $state(false);
-	let textInput = $state('');
-
-	// Initialize grid on mount
-	onMount(() => {
-		initializeGrid();
-	});
-
-	function initializeGrid() {
-		grid = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
-	}
-
-	function handleMouseDown(row: number, col: number) {
-		isDrawing = true;
-		updateCell(row, col);
-	}
-
-	function handleMouseEnter(row: number, col: number) {
-		if (isDrawing) {
-			updateCell(row, col);
+	const features = [
+		{
+			icon: Github,
+			title: 'GitHub Integration',
+			description: 'Connect to your GitHub account to directly pull your contribution graph data.'
+		},
+		{
+			icon: Twitter,
+			title: 'Optimized for Twitter',
+			description: 'Generate banners perfectly sized for Twitter headers.'
+		},
+		{
+			icon: Linkedin,
+			title: 'Ideal for LinkedIn',
+			description: 'Create banners that fit seamlessly as LinkedIn background images.'
+		},
+		{
+			icon: Download,
+			title: 'Easy Download',
+			description: 'Download your generated banner in high-resolution PNG format.'
+		},
+		{
+			icon: Palette,
+			title: 'Customizable Colors',
+			description: 'Choose from a variety of color palettes or create your own custom scheme.'
+		},
+		{
+			icon: Type,
+			title: 'Add Custom Text',
+			description: 'Personalize your banner by adding your name, tagline, or other text.'
 		}
-	}
-
-	function handleMouseUp() {
-		isDrawing = false;
-	}
-
-	function updateCell(row: number, col: number) {
-		const newGrid = [...grid];
-		newGrid[row][col] = intensity;
-		grid = newGrid;
-	}
-
-	function getCellColor(value: number) {
-		switch (value) {
-			case 0:
-				return 'bg-gray-100 dark:bg-gray-800';
-			case 1:
-				return 'bg-green-200 dark:bg-green-900';
-			case 2:
-				return 'bg-green-400 dark:bg-green-700';
-			case 3:
-				return 'bg-green-600 dark:bg-green-500';
-			case 4:
-				return 'bg-green-800 dark:bg-green-300';
-			default:
-				return 'bg-gray-100 dark:bg-gray-800';
-		}
-	}
-
-	function handleIntensityChange(event: Event) {
-		const target = event.target as HTMLInputElement | null;
-		if (target) {
-			intensity = Math.min(4, Math.max(1, parseInt(target.value) || 1));
-		}
-	}
-
-	function handleTextInput(event: Event) {
-		const target = event.target as HTMLInputElement | null;
-		if (target) {
-			textInput = target.value;
-			// Call writeText with current position
-			writeText(textPosition.row, textPosition.col);
-		}
-	}
-
-	function handleCellClick(row: number, col: number) {
-		textPosition = { row, col };
-		// Call writeText with new position
-		writeText(row, col);
-	}
-
-	function writeText(startRow = 0, startCol = 0) {
-		grid = getTextGrid(textInput, ROWS, COLS, intensity, startRow, startCol);
-	}
+		// ... Add more features
+	];
 </script>
 
-<Card.Root class="w-full max-w-4xl">
-	<Card.Header>
-		<div class="flex items-center justify-between">
-			<h2 class="text-2xl font-bold">GitHub Contribution Grid</h2>
-			<div class="space-x-2">
-				<Button variant="outline" onclick={initializeGrid} class="text-sm">Clear Grid</Button>
-			</div>
-		</div>
-	</Card.Header>
+<section class="hero bg-gray-100 py-16 text-center dark:bg-gray-900">
+	<div class="container mx-auto">
+		<h1 class="text-4xl font-bold text-gray-800 dark:text-gray-200">
+			Showcase Your Coding Journey
+		</h1>
+		<p class="mt-4 text-lg text-gray-600 dark:text-gray-400">
+			Create Stunning GitHub Contribution Banners for LinkedIn & Twitter
+		</p>
+		<Button href="#create-banner" class="mt-6">Create Your Banner</Button>
+	</div>
+</section>
 
-	<Card.Content>
-		<div class="mb-4 space-y-4">
-			<div>
-				<label for="intensity" class="mb-2 block text-sm font-medium">
-					Intensity Level (1-4):
-				</label>
-				<Input
-					id="intensity"
-					type="number"
-					min="1"
-					max="4"
-					bind:value={intensity}
-					oninput={(e) => handleIntensityChange(e)}
-					class="w-24"
-				/>
-			</div>
-			<div>
-				<label for="text-input" class="mb-2 block text-sm font-medium"> Text Input: </label>
-				<Input
-					id="text-input"
-					type="text"
-					bind:value={textInput}
-					oninput={(e) => handleTextInput(e)}
-					class="w-full"
-				/>
-			</div>
+<section class="features bg-white py-12 dark:bg-gray-800">
+	<div class="container mx-auto">
+		<h2 class="mb-8 text-center text-3xl font-bold text-gray-800 dark:text-gray-200">
+			Key Features
+		</h2>
+		<div class="features-grid grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+			{#each features as feature}
+				<div
+					class="flex flex-col items-center rounded-lg bg-gray-50 p-6 shadow-md transition-colors duration-200 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600"
+				>
+					<feature.icon class="h-10 w-10 text-primary" />
+					<h3 class="mt-4 text-xl font-semibold text-gray-800 dark:text-gray-200">
+						{feature.title}
+					</h3>
+					<p class="mt-2 text-center text-gray-600 dark:text-gray-400">{feature.description}</p>
+				</div>
+			{/each}
 		</div>
+		<section id="create-banner">
+			<ContGrid class="mt-12" />
+		</section>
+	</div>
+</section>
 
-		<div class="select-none" onmouseleave={() => (isDrawing = false)} role="presentation">
-			<div
-				class="grid gap-1"
-				style="grid-template-columns: repeat({COLS}, minmax(0, 1fr)); width: fit-content;"
-				role="grid"
-			>
-				{#each grid as row, rowIndex}
-					{#each row as cell, colIndex}
-						<div
-							class="h-4 w-4 cursor-pointer rounded-sm border border-gray-200
-					   transition-colors duration-200 dark:border-gray-700 {getCellColor(cell)}"
-							onmousedown={() => handleMouseDown(rowIndex, colIndex)}
-							onmouseenter={() => handleMouseEnter(rowIndex, colIndex)}
-							onmouseup={handleMouseUp}
-							role="gridcell"
-							tabindex="0"
-						></div>
-					{/each}
-				{/each}
-			</div>
+<section class="examples bg-gray-100 py-12 dark:bg-gray-900">
+	<div class="container mx-auto">
+		<h2 class="mb-8 text-center text-3xl font-bold text-gray-800 dark:text-gray-200">
+			Example Banners
+		</h2>
+		<div class="gallery grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+			<!-- Example Banners -->
 		</div>
+	</div>
+</section>
 
-		<div class="mt-4 text-sm text-gray-500">
-			Click and drag to draw on the grid. Use the intensity level to change contribution strength.
-		</div>
-	</Card.Content>
-</Card.Root>
+<footer class="bg-gray-800 py-6 text-center dark:bg-gray-900">
+	<div class="container mx-auto">
+		<p class="text-gray-400 dark:text-gray-500">&copy; 2023 GitHub Banner. All rights reserved.</p>
+	</div>
+</footer>
