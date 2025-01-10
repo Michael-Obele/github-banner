@@ -3,7 +3,6 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
-	import { writable } from 'svelte/store';
 	import { getTextGrid, willTextFit } from '$lib/utils/textGrid';
 
 	// Constants
