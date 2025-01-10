@@ -27,8 +27,8 @@ This project allows users to generate banner images for social media platforms u
 To get started with the project, clone the repository and install the dependencies:
 
 ```bash
-git clone https://github.com/your-username/github-con-banner.git
-cd github-con-banner
+git clone https://github.com/your-username/github-banner.git
+cd github-banner
 npm install
 ```
 
